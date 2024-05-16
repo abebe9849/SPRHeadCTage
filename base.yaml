@@ -1,0 +1,89 @@
+general:
+  debug: False ##vervoseも同じ
+  exp_num: "M004_gru_"
+  device: 0
+  seed: 42
+  num_folds: 10 #10とかにしてもよい
+
+N_patch: 25
+loss:
+  name: "BCE" #MSE, CE, BCE, Focal,bin_bce  #BCEとDLDLおなじくらい
+  num_bins: 10
+precrop: True
+
+preprocess:
+  size: 256 #256, 384, 512, 640, 768, 896, 1024, 1280, 1536, 1792, 2048
+gradient_checkpoint: False
+aug:
+  HorizontalFlip:
+    p: 0.5
+  VerticalFlip:
+    p: 0.5
+  RandomRotate90:
+    p: 0.5
+  ShiftScaleRotate:
+    p: 0.7
+    shift_limit: 0.1
+    scale_limit: 0.1
+    rotate_limit: 15
+  RandomBrightnessContrast:
+    p: 0
+    brightness_limit: 0.1
+    contrast_limit: 0.1
+  CLAHE:
+    p: 0
+  one_of_Distortion:
+    p: 0
+  one_of_Blur_Gnoise:
+    p: 0
+  GridMask:
+    p: 0
+    num_grid: 2
+  compress:
+    p: 0
+  CoarseDropout:
+    p: 0.5
+    max_holes: 4
+    max_height: 6
+    max_width: 6
+
+
+augmentation:
+  do_mixup: False
+  do_fmix: False
+  do_cutmix: False
+  do_resizemix: False
+  mix_p: 0
+  mix_alpha: 1
+
+
+model:
+  name: "tf_efficientnetv2_l" #"tf_efficientnetv2_s" 　#"maxxvit_rmlp_small_rw_256.sw_in1k"
+  # "coatnet_rmlp_1_rw_224","convnext_base_in22ft1k","swin_base_patch4_window7_224","tf_efficientnetv2_s"
+  #convnext　重い　efnetv2 s=b3とか？　#swin_large_patch4_window12_384 "tf_efficientnet_b0_ns" #tf_efficientnetv2_xl
+  #['maxvit_base_224', 'maxvit_large_224', 'maxvit_nano_rw_256', 'maxvit_pico_rw_256', 'maxvit_rmlp_nano_rw_256', 'maxvit_rmlp_pico_rw_256', 'maxvit_rmlp_small_rw_224', 'maxvit_rmlp_small_rw_256', 'maxvit_rmlp_tiny_rw_256', 'maxvit_small_224', 'maxvit_tiny_224', 'maxvit_tiny_pm_256', 'maxvit_tiny_rw_224', 'maxvit_tiny_rw_256', 'maxvit_xlarge_224']
+  pooling: "gem" 
+  features_num: 1280
+  drop_rate: 0.1
+  drop_path_rate: 0.1
+  stride: 2 #
+
+
+  
+psuedo_label: 0 #"/home/u094724e/CTage/src/outputs/2024-04-01/08-19-49/for_pl__.csv" #or sub.csv
+
+
+train:
+  amp: True
+  amp_inf: False 
+  optim: "adamw" #"radam" "sam"#SAMはnoise robust
+  lr: 0.0001
+  epochs: 20
+  without_hesitate: 15
+  batch_size: 4
+  ga_accum: 1
+  scheduler: 
+    name: "cosine_warmup" #"cosine","cosine_warmup" #
+    min_lr: 1e-7
+    t_0: 3
+    warmup: 3
