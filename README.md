@@ -5,7 +5,7 @@ conda create -n SCC -file env.yaml
 
 ### download data
 cd /data
-kaggle competitions download -c medical-ai-contest2024
+kaggle competitions download -c spr-head-ct-age-prediction-challenge
 
-### preprocess
+### preprocess&train
 bash preprocess.sh  
