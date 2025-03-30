@@ -1,7 +1,6 @@
 import hydra
 from omegaconf import DictConfig, OmegaConf
 import sys,gc,os,random,time,math,glob
-import matplotlib.pyplot as plt
 from contextlib import contextmanager
 from pathlib import Path
 from collections import defaultdict, Counter
@@ -294,7 +293,6 @@ class DLDL2_loss(nn.Module):
         loss = dldl_v2_loss(x,target,self.sigma,self.lambda_)
         return loss
 #### augmentation ==============
-import open_clip
 from transformers import AutoProcessor, CLIPVisionModel
 #### model ================
 SEQ_POOLING = {
@@ -343,10 +341,6 @@ class Model_iafoss(nn.Module):
             if self.base_model=="plip":
                 self.model = CLIPVisionModel.from_pretrained("vinid/plip")
                 nc = 768
-            elif self.base_model=="qnet":
-                self.model = open_clip.create_model_and_transforms('hf-hub:wisdomik/QuiltNet-B-32')[0]
-                
-                nc = 512
             self.gru = nn.GRU(nc, 512, bidirectional=True, batch_first=True, num_layers=2)
             nc*=CFG.N_patch
             self.head = nn.Sequential(nn.Linear(nc,512),
