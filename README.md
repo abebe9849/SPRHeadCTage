@@ -1,7 +1,7 @@
 
 
 ### install
-conda create -n SCC -file env.yaml
+conda env create -n SCC -file env.yaml
 
 ### download data
 cd /data
