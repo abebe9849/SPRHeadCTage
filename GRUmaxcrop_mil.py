@@ -1,7 +1,6 @@
 import hydra
 from omegaconf import DictConfig, OmegaConf
 import sys,gc,os,random,time,math,glob
-import matplotlib.pyplot as plt
 from contextlib import contextmanager
 from pathlib import Path
 from collections import defaultdict, Counter
@@ -245,7 +244,7 @@ def get_transforms(*, data,CFG):
 
 
 #### augmentation ==============
-import open_clip
+
 from transformers import AutoProcessor, CLIPVisionModel
 #### model ================
 SEQ_POOLING = {
